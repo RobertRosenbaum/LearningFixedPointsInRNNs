@@ -46,14 +46,15 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     # This means we will use the softmax loss function
     MySoftMaxLoss = nn.CrossEntropyLoss()
 
-    # Transpose of readout matrix
-    RT = readout_matrix.T
-
     # Define the device to use.
     # Use 'cpu' for cpu and 'cuda' for gpu
     # We will discuss GPUs later, so leave this as cpu for now
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print('device=', device)
+
+    # Transpose of readout matrix
+    RT = readout_matrix.T.to(device)
+
 
     # Compute number of steps per epoch
     # and total number of steps
