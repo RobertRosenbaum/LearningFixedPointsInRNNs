@@ -112,38 +112,8 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
                     TestAccuracies[kk, j] = (PredictedClass == Y).float().mean().item()
 
                 with torch.no_grad():
-                    # # Backward pass and optimize
-                    # optimizer.zero_grad() # Zero-out gradients from last iteration
-                    # Loss.backward()       # Compute gradients
-
-                    # optimizer.step()      # Update parameters
-
                     Set_Grad(model, Loss, r, X, Y, Yhat, RT)
-
-                    # dW = torch.zeros(N, N).to(device)
-                    # Id = torch.eye(N).to(device)
-                    # g = 1 - r ** 2
-                    # s = functional.softmax(Yhat, dim=1)
-                    # W = model.WT.T
-                    # yoh = functional.one_hot(Y, num_classes=10)
-                    # for ii in range(len(X)):
-                    #     # vector of gains
-                    #     gi = g[ii, :]
-                    #
-                    #     # These don't seem right, but they are. See next code cell
-                    #     # where they are tested
-                    #     GiW = W * gi[:, None]
-                    #     ImWGiGi = gi[None, :] * (Id - gi[None, :] * W)
-                    #     ImGiW = Id - GiW
-                    #
-                    #     dW += torch.outer(ImWGiGi @ (RT) @ (s[ii, :] - yoh[ii, :]),
-                    #                       (ImGiW.T) @ ImGiW @ r[ii, :]) / len(X)
-                    # dW += alpha * W
-                    # model.WT.grad = dW.T
-
-                    #model.WT -= LearningRates[kk] * dW.T
                     optimizer.step()
-
 
                 j += 1
             print('LR [{}/{}], Epoch [{}/{}], Loss: {:.2f}, Acc: {:.2f}%, time:{:.1f}'.format(kk + 1, len(LearningRates), k + 1,

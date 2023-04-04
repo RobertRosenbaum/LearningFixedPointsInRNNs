@@ -27,3 +27,4 @@ def Set_Grad_dW3(model, Loss, r, X, Y, Yhat, RT):
 
 def Set_Grad_BPTT(model, Loss, r, X, Y, Yhat, RT):
     Loss.backward()
+
