@@ -70,6 +70,9 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     Losses = np.zeros((len(LearningRates), total_num_steps))
     Accuracies = np.zeros((len(LearningRates), total_num_steps))
 
+    # Store Jacobian
+    Jacobian = []
+
     t1 = tm()  # Start the timer
     for kk in range(len(LearningRates)):
         torch.manual_seed(seed)
@@ -120,6 +123,11 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
                                                                                  num_epochs, Loss.item(),
                                                                                  100 * Accuracies[kk, j - 1],tm()-t1),flush=True)
 
+    # V: Compute eigenvalues of Jacobian
+    with torch.no_grad():
+        lam, _ = np.linalg.eig((model.WT).cpu().numpy())
+        Jacobian.append(lam)
+
     TrainingTime = tm() - t1
     print("Training time =", TrainingTime, "sec =", TrainingTime / (len(LearningRates) * num_epochs), "sec/epoch =",
           TrainingTime / (len(LearningRates) * total_num_steps), "sec/step")
@@ -136,7 +144,13 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
 
     torch.cuda.empty_cache()  # This helps avoid out-of-memory errors
 
-    Training_Stats = {'TrainingLosses':Losses, 'TrainingAccuracies':Accuracies, 'TestLosses':TestLosses, 'TestAccuracies':TestAccuracies, 'TrainingTime':TrainingTime}
+    Training_Stats = {'LearningRates':LearningRates,
+                      'TrainingLosses':Losses,
+                      'TrainingAccuracies':Accuracies,
+                      'TestLosses':TestLosses,
+                      'TestAccuracies':TestAccuracies,
+                      'TrainingTime':TrainingTime,
+                      'Jacobian': Jacobian}
 
 
     return model,Training_Stats
