@@ -28,3 +28,22 @@ def Set_Grad_dW3(model, Loss, r, X, Y, Yhat, RT):
 def Set_Grad_BPTT(model, Loss, r, X, Y, Yhat, RT):
     Loss.backward()
 
+def Set_Grad_dW1(model, Loss, r, X, Y, Yhat, RT):
+    N = r.shape[1]
+    device = r.device
+    dW = torch.zeros(N, N).to(device)
+    Id = torch.eye(N).to(device)
+    g = 1 - r ** 2
+    s = functional.softmax(Yhat, dim=1)
+    W = model.WT.T
+    yoh = functional.one_hot(Y, num_classes=10)
+    for ii in range(len(X)):
+        # vector of gains
+        gi = g[ii, :]
+
+        ImWGiGi = gi[None, :] * (Id - gi[None, :] * W)
+
+        dW += torch.outer(torch.linalg.inv(ImWGiGi.T) @ (RT) @ (s[ii, :] - yoh[ii, :]),
+                          r[ii, :]) / len(X)
+
+    model.WT.grad = dW.T
