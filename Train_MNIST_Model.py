@@ -71,7 +71,7 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     Accuracies = np.zeros((len(LearningRates), total_num_steps))
 
     # V: Store Jacobian
-    Jacobian = []
+    Jacobian = [None]*len(LearningRates)
 
     t1 = tm()  # Start the timer
     for kk in range(len(LearningRates)):
@@ -127,9 +127,10 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
         with torch.no_grad():
             try:
                 lam, _ = np.linalg.eig((model.WT).cpu().numpy())
-                Jacobian.append(lam)
+                Jacobian[kk] = lam
             except:
-                print("An exception occured!")
+                Jacobian[kk] = np.array([])
+                print("Unable to compute eigenvalues.")
 
 
     TrainingTime = tm() - t1

@@ -78,7 +78,10 @@ def CreatePlots(Training_Stats):
     # Plot Jacobian
     plt.figure()
     for kk in range(len(LearningRates)):
-      plt.plot(np.real(Jacobian[kk]),np.imag(Jacobian[kk]),'.', label=r'$\eta = $' + str(LearningRates[kk]))
-      plt.title('Eigenvalues of W after learning')
-      plt.legend()
-      plt.show()
+        if len(Jacobian[kk])>0:
+            plt.plot(np.real(Jacobian[kk]),np.imag(Jacobian[kk]),'.', label=r'$\eta = $' + str(LearningRates[kk]))
+            plt.title('Eigenvalues of W after learning')
+            plt.legend()
+            plt.show()
+        else:
+            print('No eigenvalues to plot for learning rate',LearningRates[kk])
