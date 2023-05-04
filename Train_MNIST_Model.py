@@ -126,6 +126,8 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
             print('LR [{}/{}], Epoch [{}/{}], Loss: {:.2f}, Acc: {:.2f}%, time:{:.1f}'.format(kk + 1, len(LearningRates), k + 1,
                                                                                  num_epochs, Loss.item(),
                                                                                  100 * Accuracies[kk, j - 1],tm()-t1),flush=True)
+            # This helps avoid out-of-memory errors
+            torch.cuda.empty_cache()
 
         # Run model on full test data set
         X=test_dataset.data.reshape(-1,28,28).float().to(device)
@@ -160,7 +162,7 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     print('Final Test Loss:', TestLosses[:, j - 1])
     print('Final Test Accuracy:', 100 * TestAccuracies[:, j - 1], '%')
 
-    torch.cuda.empty_cache()  # This helps avoid out-of-memory errors
+
 
     Training_Stats = {'LearningRates':LearningRates,
                       'TrainingLosses':Losses,
