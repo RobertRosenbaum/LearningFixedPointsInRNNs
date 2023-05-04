@@ -65,10 +65,14 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     # Initialize Test Losses if we'll compute them
     TestLosses = np.zeros((len(LearningRates), total_num_steps))
     TestAccuracies = np.zeros((len(LearningRates), total_num_steps))
+    FinalTestAccuracies = np.zeros(len(LearningRates))
+    FinalTestLosses = np.zeros(len(LearningRates))
 
     # Initialize training losses to plot
     Losses = np.zeros((len(LearningRates), total_num_steps))
     Accuracies = np.zeros((len(LearningRates), total_num_steps))
+
+
 
     # V: Store Jacobian
     Jacobian = [None]*len(LearningRates)
@@ -123,6 +127,15 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
                                                                                  num_epochs, Loss.item(),
                                                                                  100 * Accuracies[kk, j - 1],tm()-t1),flush=True)
 
+        # Run model on full test data set
+        X=test_dataset.data.reshape(-1,28,28).float().to(device)
+        Y=test_dataset.targets.to(device)
+        r = model(X)
+        Yhat = r @ RT
+        FinalTestLosses[kk] = MySoftMaxLoss(Yhat, Y).item()
+        PredictedClass = torch.argmax(Yhat, dim=1)
+        FinalTestAccuracies[kk] = (PredictedClass == Y).float().mean().item()
+
         # V: Compute eigenvalues of Jacobian
         with torch.no_grad():
             try:
@@ -154,6 +167,8 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
                       'TrainingAccuracies':Accuracies,
                       'TestLosses':TestLosses,
                       'TestAccuracies':TestAccuracies,
+                      'FinalTestLosses':FinalTestLosses,
+                      'FinalTestAccuracies': FinalTestAccuracies,
                       'TrainingTime':TrainingTime,
                       'Jacobian': Jacobian}
 
