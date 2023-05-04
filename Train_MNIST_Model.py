@@ -5,7 +5,7 @@ from time import time as tm
 from torchvision.datasets import MNIST
 import torchvision.transforms as transforms
 
-def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size, test_batch_size, num_epochs, Set_Grad, alpha = 0, seed=1):
+def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size, test_batch_size, num_epochs, Set_Grad, gain, alpha = 0, seed=1):
 
     print('Training model.')
 
@@ -115,7 +115,7 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
                     TestAccuracies[kk, j] = (PredictedClass == Y).float().mean().item()
 
                 with torch.no_grad():
-                    Set_Grad(model, Loss, r, X, Y, Yhat, RT)
+                    Set_Grad(model, Loss, r, X, Y, Yhat, RT, gain)
                     optimizer.step()
 
                 j += 1
