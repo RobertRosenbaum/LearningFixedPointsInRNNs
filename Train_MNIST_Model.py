@@ -125,8 +125,12 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
 
         # V: Compute eigenvalues of Jacobian
         with torch.no_grad():
-            lam, _ = np.linalg.eig((model.WT).cpu().numpy())
-            Jacobian.append(lam)
+            try:
+                lam, _ = np.linalg.eig((model.WT).cpu().numpy())
+                Jacobian.append(lam)
+            except:
+                print("An exception occured!")
+
 
     TrainingTime = tm() - t1
     print("Training time =", TrainingTime, "sec =", TrainingTime / (len(LearningRates) * num_epochs), "sec/epoch =",

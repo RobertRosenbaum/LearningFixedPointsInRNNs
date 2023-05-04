@@ -92,4 +92,5 @@ def Set_Grad_dW1_relu(model, Loss, r, X, Y, Yhat, RT):
 
         dW+=torch.outer((GiInvImWTGi)@(RT)@(s[ii,:]-yoh[ii,:]), r[ii,:])/len(X)
 
+    #dW+= alpha*W
     model.WT.grad = dW.T
