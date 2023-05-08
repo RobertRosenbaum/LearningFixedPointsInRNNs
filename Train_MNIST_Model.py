@@ -130,7 +130,8 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
             torch.cuda.empty_cache()
 
         # Run model on full test data set
-        X=test_dataset.data.reshape(-1,28,28).float().to(device)
+        X=test_dataset.data.reshape(-1,28*28).float().to(device)
+        X = X.to(device)
         Y=test_dataset.targets.to(device)
         r = model(X)
         Yhat = r @ RT
