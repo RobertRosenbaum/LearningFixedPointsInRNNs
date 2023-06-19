@@ -27,6 +27,7 @@ def Set_Grad_dW3(model, Loss, r, X, Y, Yhat, RT, gain = 'tanh'):
         ImWGiGi = gi[None, :] * (Id - gi[None, :] * W)
         ImGiW = Id - GiW
 
+
         dW += torch.outer(ImWGiGi @ (RT) @ (s[ii, :] - yoh[ii, :]),
                           (ImGiW.T) @ ImGiW @ r[ii, :]) / len(X)
 
@@ -55,9 +56,14 @@ def Set_Grad_dW1(model, Loss, r, X, Y, Yhat, RT, gain = 'tanh'):
     for ii in range(len(X)):
         # vector of gains
         gi = g[ii, :]
-        # Gi = torch.diag(gi)
+
 
         GiInvImWTGi = torch.linalg.inv(Id - gi[None,:]*W.T)*gi[:,None]
+
+        # # Check for correctness
+        # GiInv = torch.diag(1/gi)
+        # GiInvImWTGiLong = torch.linalg.inv(GiInv - W).T
+        # print('dW1 test:',(GiInvImWTGi-GiInvImWTGiLong).norm()/GiInvImWTGiLong.norm())
 
         dW+=torch.outer((GiInvImWTGi)@(RT)@(s[ii,:]-yoh[ii,:]), r[ii,:])/len(X)
 

@@ -52,6 +52,13 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print('device=', device)
 
+    if torch.cuda.is_available():
+        device = "cuda"
+    # elif torch.backends.mps.is_available():
+    #     device = "mps"
+    else:
+        device = "cpu"
+
     # Transpose of readout matrix
     RT = readout_matrix.T.to(device)
 

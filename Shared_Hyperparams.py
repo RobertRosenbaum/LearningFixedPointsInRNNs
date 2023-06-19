@@ -2,10 +2,10 @@
 print('Setting shared hyperparameters.')
 
 # Number of hidden units
-N=200
+N=300
 
 # Number of time steps
-Nt=200
+Nt=500
 
 # Step size for rate models
 # (equiv to dt/tau)
