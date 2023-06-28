@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import warnings
 import pickle
 
-#git clone https://github.com/RobertRosenbaum/LearningFixedPointsInRNNs.git
-
 from Model_Definitions import RateModel as ModelType
 from Define_Update_Rules import Set_Grad_dW1 as Set_Grad
 from Train_MNIST_Model import Train_MNIST_Model

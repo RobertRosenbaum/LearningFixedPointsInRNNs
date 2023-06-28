@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import warnings
 import pickle
 
-#git clone https://github.com/RobertRosenbaum/LearningFixedPointsInRNNs.git
-
 from Model_Definitions import RateModel as ModelType
 from Define_Update_Rules import Set_Grad_dW3 as Set_Grad
 from Train_MNIST_Model import Train_MNIST_Model
@@ -20,7 +18,6 @@ with torch.no_grad():
     # False if you just want to load data for plots
     RunSims = True
 
-    #LearningRates = [.01, .025, .05, .1, .5]
     LearningRates = [.01, .025, .05, .1, .25]
 
     # Regularization coefficient
