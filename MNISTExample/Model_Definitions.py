@@ -25,7 +25,7 @@ class RateModel(nn.Module):
 
         self.eta = eta
         self.WT = nn.Parameter(self.rho*torch.randn(N,N)/torch.sqrt(torch.tensor(N)))
-        self.WxT = nn.Parameter(torch.randn(Nx,N)/torch.sqrt(torch.tensor(Nx)), requires_grad=False)
+        self.WxT = nn.Parameter((torch.randn(Nx,N))/torch.sqrt(torch.tensor(Nx)), requires_grad=False)
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -94,7 +94,7 @@ class RNNModel(nn.Module):
 
         self.eta = eta
         self.WT = nn.Parameter(self.rho*torch.randn(N,N)/torch.sqrt(torch.tensor(N)))
-        self.WxT = nn.Parameter(torch.randn(Nx,N)/torch.sqrt(torch.tensor(Nx)), requires_grad=False)
+        self.WxT = nn.Parameter((torch.randn(Nx,N))/torch.sqrt(torch.tensor(Nx)), requires_grad=False)
 
     def forward(self, x):
         batch_size = x.shape[0]

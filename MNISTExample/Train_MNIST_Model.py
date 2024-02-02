@@ -46,12 +46,6 @@ def Train_MNIST_Model(LearningRates, Get_Model, readout_matrix, train_batch_size
     # This means we will use the softmax loss function
     MySoftMaxLoss = nn.CrossEntropyLoss()
 
-    # Define the device to use.
-    # Use 'cpu' for cpu and 'cuda' for gpu
-    # We will discuss GPUs later, so leave this as cpu for now
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print('device=', device)
-
     if torch.cuda.is_available():
         device = "cuda"
     # elif torch.backends.mps.is_available():
