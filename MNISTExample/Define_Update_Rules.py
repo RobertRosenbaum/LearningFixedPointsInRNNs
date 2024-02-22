@@ -68,3 +68,36 @@ def Set_Grad_dW1(model, Loss, r, X, Y, Yhat, RT, gain = 'tanh'):
         dW+=torch.outer((GiInvImWTGi)@(RT)@(s[ii,:]-yoh[ii,:]), r[ii,:])/len(X)
 
     model.WT.grad = dW.T
+
+
+
+def Set_Grad_dW4(model, Loss, r, X, Y, Yhat, RT, gain = 'tanh'):
+    N = r.shape[1]
+    device = r.device
+    dW = torch.zeros(N, N).to(device)
+    Id = torch.eye(N).to(device)
+
+    if gain == 'tanh':
+        g = 1.0 - r ** 2
+    elif gain == 'relu':
+        g = 1.0 * (r > 0)
+    else:
+        g = gain
+
+    s = functional.softmax(Yhat, dim=1)
+    W = model.WT.T
+    yoh = functional.one_hot(Y, num_classes=10)
+    for ii in range(len(X)):
+        # vector of gains
+        gi = g[ii, :]
+
+        # These don't seem right, but they are. See next code cell
+        # where they are tested
+        ImWGi =  (Id - gi[None, :] * W)
+
+
+        dW += torch.outer(ImWGi @ (RT) @ (s[ii, :] - yoh[ii, :]),
+                          (ImWGi.T) @ ImWGi @ r[ii, :]) / len(X)
+
+    model.WT.grad = dW.T
+
